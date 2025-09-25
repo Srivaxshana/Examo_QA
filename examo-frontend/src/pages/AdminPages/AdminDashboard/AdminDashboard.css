@@ -1,0 +1,93 @@
+.vh-100 {
+  height: 100vh;
+}
+
+.sidebar {
+  background-color: #6c757d;
+  min-height: calc(100vh - 56px);
+  width: 200px;
+}
+
+.sidebar-item {
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sidebar-item.active {
+  background-color: #495057;
+  color: white;
+}
+
+.stats-card {
+  background-color: #e9ecef;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+}
+
+.stats-count {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+.stats-title {
+  font-size: 1.1rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+}
+
+.brand {
+  font-weight: bold;
+  color: white;
+}
+
+.main-content {
+  background-color: #f8f9fa;
+  flex: 1;
+  padding: 30px;
+}
+
+
+.navbar {
+  background-color: #495057 !important;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
