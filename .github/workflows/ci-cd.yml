@@ -16,25 +16,35 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: sri1708
           MYSQL_DATABASE: examo_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: sri1708
-        ports:
-          - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost"
+          --health-cmd="mysqladmin ping -h localhost -uroot -psri1708"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
 
     steps:
+      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Set up JDK
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
+
+      # Wait for MySQL
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -uroot -psri1708 >/dev/null 2>&1; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
 
       # Build backend
       - name: Build backend (Spring Boot)
@@ -46,6 +56,7 @@ jobs:
         run: mvn spring-boot:run &
         working-directory: examo-backend/examo-backend
 
+      # Wait for backend
       - name: Wait for backend
         run: npx wait-on http://localhost:8080
 
