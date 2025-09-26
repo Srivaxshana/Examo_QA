@@ -10,6 +10,22 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: examo_db
+          MYSQL_USER: root
+          MYSQL_PASSWORD: sri1708
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -20,28 +36,31 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    # Install Node.js for frontend
+    - name: Build backend (Spring Boot)
+      run: mvn clean install -DskipTests
+
+    - name: Run backend
+      run: mvn spring-boot:run &
+    
+    - name: Wait for backend
+      run: npx wait-on http://localhost:8080
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
 
-    # Start frontend before Selenium
-    - name: Start frontend
+    - name: Start frontend (Vite)
       run: |
         cd frontend
         npm install
         npm run build
-        npm start &
+        npm run preview -- --port 3000 &
     
-    # Wait until frontend is running
     - name: Wait for frontend
       run: npx wait-on http://localhost:3000/student/login
 
-    - name: Build with Maven
-      run: mvn clean install -DskipTests
-
-    - name: Run tests (including Selenium + BDD)
+    - name: Run tests (unit, BDD, Selenium)
       run: mvn test
 
     - name: Upload test reports
