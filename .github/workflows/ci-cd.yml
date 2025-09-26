@@ -14,7 +14,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: sri1708
           MYSQL_DATABASE: examo_db
           MYSQL_USER: root
           MYSQL_PASSWORD: sri1708
@@ -47,4 +47,34 @@ jobs:
         working-directory: examo-backend/examo-backend
 
       - name: Wait for backend
-        run: npx wait-on http://localhost:8
+        run: npx wait-on http://localhost:8080
+
+      # Setup Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # Build and start frontend
+      - name: Start frontend (Vite)
+        run: |
+          cd examo-frontend
+          npm install
+          npm run build
+          npm run preview -- --port 3000 &
+      
+      - name: Wait for frontend
+        run: npx wait-on http://localhost:3000/student/login
+
+      # Run all tests (unit, BDD, Selenium)
+      - name: Run tests
+        run: mvn test
+        working-directory: examo-backend/examo-backend
+
+      # Upload test reports
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: examo-backend/examo-backend/target/surefire-reports
