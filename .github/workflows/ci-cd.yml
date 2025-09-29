@@ -58,9 +58,13 @@ jobs:
         run: mvn spring-boot:run -Dspring-boot.run.profiles=test &
         working-directory: examo-backend/examo-backend
 
+      # Install wait-on globally
+      - name: Install wait-on
+        run: npm install -g wait-on
+
       # Wait until backend is ready
       - name: Wait for backend
-        run: npx wait-on http://localhost:8080
+        run: wait-on http://localhost:8080
 
       # Set up Node.js for frontend
       - name: Set up Node.js
@@ -78,7 +82,7 @@ jobs:
       
       # Wait until frontend is ready
       - name: Wait for frontend
-        run: npx wait-on http://localhost:3000/student/login
+        run: wait-on http://localhost:3000/student/login
 
       # Run all tests (Unit, BDD, Selenium)
       - name: Run tests
