@@ -53,18 +53,24 @@ jobs:
         run: mvn clean install -DskipTests
         working-directory: examo-backend/examo-backend
 
-      # Start backend in background
+      # Start backend in background & log output
       - name: Run backend
-        run: mvn spring-boot:run -Dspring-boot.run.profiles=test &
+        run: |
+          mvn spring-boot:run -Dspring-boot.run.profiles=test > backend.log 2>&1 &
+          echo $! > backend.pid
         working-directory: examo-backend/examo-backend
 
+      # Show backend logs while waiting
+      - name: Tail backend logs
+        run: tail -n 100 -f examo-backend/examo-backend/backend.log &
+      
       # Install wait-on globally
       - name: Install wait-on
         run: npm install -g wait-on
 
-      # Wait until backend is ready
+      # Wait until backend is ready (60s timeout)
       - name: Wait for backend
-        run: wait-on http://localhost:8080
+        run: wait-on -t 60000 http://localhost:8080
 
       # Set up Node.js for frontend
       - name: Set up Node.js
@@ -78,18 +84,19 @@ jobs:
           cd examo-frontend
           npm ci
           npm run build
-          npm run preview -- --port 3000 &
-      
+          npm run preview -- --port 3000 > ../frontend.log 2>&1 &
+          echo $! > ../frontend.pid
+
       # Wait until frontend is ready
       - name: Wait for frontend
-        run: wait-on http://localhost:3000/student/login
+        run: wait-on -t 60000 http://localhost:3000/student/login
 
       # Run all tests (Unit, BDD, Selenium)
       - name: Run tests
         run: mvn test
         working-directory: examo-backend/examo-backend
 
-      # Upload test reports (JUnit + Cucumber)
+      # Upload test reports (JUnit + Cucumber + logs)
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -98,3 +105,5 @@ jobs:
           path: |
             examo-backend/examo-backend/target/surefire-reports
             examo-backend/examo-backend/target/cucumber-reports
+            examo-backend/examo-backend/backend.log
+            examo-frontend/frontend.log
