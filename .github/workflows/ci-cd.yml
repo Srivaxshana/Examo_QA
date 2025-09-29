@@ -16,14 +16,16 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: sri1708
           MYSQL_DATABASE: examo_db
+        ports:
+          - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -uroot -psri1708"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psri1708"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
 
     steps:
-      # Checkout code
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -34,15 +36,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Wait for MySQL
+      # Wait for MySQL to be ready
       - name: Wait for MySQL
         run: |
           for i in {1..30}; do
             if mysqladmin ping -h 127.0.0.1 -P 3306 -uroot -psri1708 >/dev/null 2>&1; then
-              echo "MySQL is up!"
+              echo "✅ MySQL is up!"
               break
             fi
-            echo "Waiting for MySQL..."
+            echo "⏳ Waiting for MySQL..."
             sleep 5
           done
 
@@ -51,42 +53,44 @@ jobs:
         run: mvn clean install -DskipTests
         working-directory: examo-backend/examo-backend
 
-      # Start backend
+      # Start backend in background
       - name: Run backend
-        run: mvn spring-boot:run &
+        run: mvn spring-boot:run -Dspring-boot.run.profiles=test &
         working-directory: examo-backend/examo-backend
 
-      # Wait for backend
+      # Wait until backend is ready
       - name: Wait for backend
         run: npx wait-on http://localhost:8080
 
-      # Setup Node.js
+      # Set up Node.js for frontend
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # Build and start frontend
+      # Build and run frontend (Vite)
       - name: Start frontend (Vite)
         run: |
           cd examo-frontend
-          npm install
+          npm ci
           npm run build
           npm run preview -- --port 3000 &
       
+      # Wait until frontend is ready
       - name: Wait for frontend
         run: npx wait-on http://localhost:3000/student/login
 
-      # Run all tests (unit, BDD, Selenium)
+      # Run all tests (Unit, BDD, Selenium)
       - name: Run tests
         run: mvn test
         working-directory: examo-backend/examo-backend
 
-      # Upload test reports
+      # Upload test reports (JUnit + Cucumber)
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
-          path: examo-backend/examo-backend/target/surefire-reports
-
+          path: |
+            examo-backend/examo-backend/target/surefire-reports
+            examo-backend/examo-backend/target/cucumber-reports
