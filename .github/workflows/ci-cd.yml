@@ -53,24 +53,22 @@ jobs:
         run: mvn clean install -DskipTests
         working-directory: examo-backend/examo-backend
 
-      # Start backend in background & log output
+      # Start backend and keep logs
       - name: Run backend
         run: |
-          mvn spring-boot:run -Dspring-boot.run.profiles=test > backend.log 2>&1 &
-          echo $! > backend.pid
+          nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > backend.log 2>&1 &
         working-directory: examo-backend/examo-backend
 
-      # Show backend logs while waiting
+      # Debug: show backend logs if startup fails
       - name: Tail backend logs
-        run: tail -n 100 -f examo-backend/examo-backend/backend.log &
-      
-      # Install wait-on globally
-      - name: Install wait-on
-        run: npm install -g wait-on
+        run: |
+          sleep 10
+          tail -n 50 examo-backend/examo-backend/backend.log
 
-      # Wait until backend is ready (60s timeout)
+      # Wait until backend is ready (timeout 90s)
       - name: Wait for backend
-        run: wait-on -t 60000 http://localhost:8080
+        run: wait-on -t 90000 http://localhost:8080/actuator/health || (echo "Backend failed to start"; cat examo-backend/examo-backend/backend.log; exit 1)
+
 
       # Set up Node.js for frontend
       - name: Set up Node.js
