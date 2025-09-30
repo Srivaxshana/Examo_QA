@@ -53,83 +53,59 @@ jobs:
       - name: Install wait-on
         run: npm install -g wait-on
       
-      # Build backend first (without running tests yet)
+      # Build backend
       - name: Build backend
         run: mvn clean install -DskipTests
         working-directory: examo-backend/examo-backend
       
-      # Start backend in background
+      # Start backend
       - name: Start backend
         run: |
           nohup mvn spring-boot:run > backend.log 2>&1 &
           echo $! > backend.pid
-          echo "Backend started with PID $(cat backend.pid)"
         working-directory: examo-backend/examo-backend
       
-      # Wait for backend to be healthy
+      # Wait for backend
       - name: Wait for backend health
         run: |
-          echo "Waiting for backend to start..."
           wait-on -t 120000 http://localhost:8080/actuator/health || \
           (echo "❌ Backend failed to start" && \
-           echo "📋 Backend logs:" && \
            cat examo-backend/examo-backend/backend.log && \
            exit 1)
-          echo "✅ Backend is healthy"
       
-      # Verify backend is responding
-      - name: Test backend endpoint
-        run: |
-          echo "Testing backend health endpoint..."
-          curl -f http://localhost:8080/actuator/health || exit 1
-          echo "✅ Backend responding correctly"
-      
-      # Set up Node.js
+      # Set up Node.js 20 (FIXED VERSION)
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
       
-      # Build and start frontend
+      # Build frontend
       - name: Build frontend
         run: |
           cd examo-frontend
           npm ci
           npm run build
       
+      # Start frontend
       - name: Start frontend
         run: |
           cd examo-frontend
           nohup npm run preview -- --host 0.0.0.0 --port 3000 > ../frontend.log 2>&1 &
           echo $! > ../frontend.pid
-          echo "Frontend started with PID $(cat ../frontend.pid)"
       
-      # Wait for frontend
+      # Wait for frontend with better error handling
       - name: Wait for frontend
         run: |
-          echo "Waiting for frontend to start..."
           wait-on -t 60000 http://localhost:3000 || \
           (echo "❌ Frontend failed to start" && \
-           echo "📋 Frontend logs:" && \
            cat frontend.log && \
            exit 1)
-          echo "✅ Frontend is ready"
       
-      # Give everything a moment to stabilize
-      - name: Stabilization delay
+      # Stabilization delay
+      - name: Wait for services to stabilize
         run: sleep 5
       
-      # Show logs before tests for debugging
-      - name: Show service logs
-        if: always()
-        run: |
-          echo "=== Backend Logs ==="
-          tail -n 50 examo-backend/examo-backend/backend.log || echo "No backend logs"
-          echo ""
-          echo "=== Frontend Logs ==="
-          tail -n 50 frontend.log || echo "No frontend logs"
-      
-      # Run all tests
+      # Run tests
       - name: Run tests
         run: mvn test
         working-directory: examo-backend/examo-backend
@@ -145,14 +121,3 @@ jobs:
             examo-backend/examo-backend/target/cucumber-reports
             examo-backend/examo-backend/backend.log
             frontend.log
-      
-      # Cleanup
-      - name: Stop services
-        if: always()
-        run: |
-          if [ -f examo-backend/examo-backend/backend.pid ]; then
-            kill $(cat examo-backend/examo-backend/backend.pid) || true
-          fi
-          if [ -f frontend.pid ]; then
-            kill $(cat frontend.pid) || true
-          fi
