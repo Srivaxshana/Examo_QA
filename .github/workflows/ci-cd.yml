@@ -55,6 +55,15 @@ jobs:
             sleep 5
           done
 
+      # Install wait-on globally
+      - name: Install wait-on
+        run: npm install -g wait-on
+
+      # Wait until backend is ready
+      - name: Wait for backend
+        run: wait-on -t 90000 http://localhost:8080/actuator/health || (echo "Backend failed to start"; cat examo-backend/examo-backend/backend.log; exit 1)
+
+
       # Build backend
       - name: Build backend (Spring Boot)
         run: mvn clean install -DskipTests
