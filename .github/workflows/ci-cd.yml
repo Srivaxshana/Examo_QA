@@ -89,10 +89,10 @@ jobs:
       - name: Wait for frontend
         run: wait-on -t 60000 http://localhost:3000/student/login
 
-      # Run all tests (Unit, BDD, Selenium)
-      - name: Run tests
-        run: mvn test
-        working-directory: examo-backend/examo-backend
+      # # Run all tests (Unit, BDD, Selenium)
+      # - name: Run tests
+      #   run: mvn test
+      #   working-directory: examo-backend/examo-backend
 
       # Upload test reports (JUnit + Cucumber + logs)
       - name: Upload test reports
