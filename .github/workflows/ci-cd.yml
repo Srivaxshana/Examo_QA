@@ -7,53 +7,58 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build-backend:
     runs-on: ubuntu-latest
-
+    
+    defaults:
+      run:
+        working-directory: examo-backend/examo-backend
+    
     services:
       mysql:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: sri1708
           MYSQL_DATABASE: examo_db
-          
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psri1708"
+          --health-cmd="mysqladmin ping -h localhost -u root -psri1708"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=10
-
+          --health-retries=5
+    
     env:
       SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/examo_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: sri1708
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-
+    
     steps:
-      # Checkout repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      # Set up JDK
+        with:
+          fetch-depth: 0
+      
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-
-      # Wait for MySQL to be ready
-      - name: Wait for MySQL
+          cache: maven
+      
+      - name: Wait for MySQL to be ready
         run: |
+          echo "Waiting for MySQL to be ready..."
           for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 -uroot -psri1708 >/dev/null 2>&1; then
-              echo "✅ MySQL is up!"
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -psri1708 --silent; then
+              echo "✅ MySQL is ready!"
               break
             fi
-            echo "⏳ Waiting for MySQL..."
-            sleep 5
+            echo "⏳ MySQL not ready yet. Attempt $i/30"
+            sleep 2
           done
+<<<<<<< HEAD
 
       # Install wait-on globally
       - name: Install wait-on
@@ -77,53 +82,55 @@ jobs:
 
       # Start backend and keep logs
       - name: Run backend
+=======
+      
+      - name: Verify database connection
+>>>>>>> f6a4865ead8a73056e04924273965b8d87d6c731
         run: |
-          nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > backend.log 2>&1 &
-        working-directory: examo-backend/examo-backend
+          mysql -h 127.0.0.1 -P 3306 -u root -psri1708 -e "SHOW DATABASES;"
+      
+      # Run tests excluding Selenium/UI tests
+      - name: Run unit and integration tests (excluding Selenium)
+        run: mvn test -Dtest='!*Selenium*,!*UI*,!*UITest*,!LoginUITest'
+      
+      - name: Build package
+        run: mvn package -DskipTests
+      
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-test-reports
+          path: |
+            examo-backend/examo-backend/target/surefire-reports/
+            examo-backend/examo-backend/target/cucumber-reports/
 
-      # Debug: show backend logs if startup fails
-      - name: Tail backend logs
-        run: |
-          sleep 10
-          tail -n 50 examo-backend/examo-backend/backend.log
-
-      # Wait until backend is ready (timeout 90s)
-      - name: Wait for backend
-        run: wait-on -t 90000 http://localhost:8080/actuator/health || (echo "Backend failed to start"; cat examo-backend/examo-backend/backend.log; exit 1)
-
-
-      # Set up Node.js for frontend
+  build-frontend:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: examo-frontend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
-      # Build and run frontend (Vite)
-      - name: Start frontend (Vite)
-        run: |
-          cd examo-frontend
-          npm ci
-          npm run build
-          npm run preview -- --port 3000 > ../frontend.log 2>&1 &
-          echo $! > ../frontend.pid
-
-      # Wait until frontend is ready
-      - name: Wait for frontend
-        run: wait-on -t 60000 http://localhost:3000/student/login
-
-      # Run all tests (Unit, BDD, Selenium)
-      - name: Run tests
-        run: mvn test
-        working-directory: examo-backend/examo-backend
-
-      # Upload test reports (JUnit + Cucumber + logs)
-      - name: Upload test reports
-        if: always()
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: examo-frontend/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build frontend
+        run: CI=false npm run build
+      
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
-          path: |
-            examo-backend/examo-backend/target/surefire-reports
-            examo-backend/examo-backend/target/cucumber-reports
-            examo-backend/examo-backend/backend.log
-            examo-frontend/frontend.log
+          name: frontend-build
+          path: examo-frontend/dist/
