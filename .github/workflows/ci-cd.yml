@@ -59,9 +59,15 @@ jobs:
       - name: Install wait-on
         run: npm install -g wait-on
 
-      # Wait until backend is ready
-      - name: Wait for backend
-        run: wait-on -t 90000 http://localhost:8080/actuator/health || (echo "Backend failed to start"; cat examo-backend/examo-backend/backend.log; exit 1)
+      # Install Google Chrome for Selenium
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg unzip
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
 
 
       # Build backend
