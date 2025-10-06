@@ -58,34 +58,8 @@ jobs:
             echo "⏳ MySQL not ready yet. Attempt $i/30"
             sleep 2
           done
-<<<<<<< HEAD
 
-      # Install wait-on globally
-      - name: Install wait-on
-        run: npm install -g wait-on
-
-      # Install Google Chrome for Selenium
-      - name: Install Google Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg unzip
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-
-
-      # Build backend
-      - name: Build backend (Spring Boot)
-        run: mvn clean install -DskipTests
-        working-directory: examo-backend/examo-backend
-
-      # Start backend and keep logs
-      - name: Run backend
-=======
-      
       - name: Verify database connection
->>>>>>> f6a4865ead8a73056e04924273965b8d87d6c731
         run: |
           mysql -h 127.0.0.1 -P 3306 -u root -psri1708 -e "SHOW DATABASES;"
       
@@ -94,7 +68,7 @@ jobs:
         run: mvn test -Dtest='!*Selenium*,!*UI*,!*UITest*,!LoginUITest'
       
       - name: Build package
-        run: mvn package -DskipTests
+        run: mvn -B -DskipTests package
       
       - name: Upload test reports
         uses: actions/upload-artifact@v4
@@ -102,8 +76,8 @@ jobs:
         with:
           name: backend-test-reports
           path: |
-            examo-backend/examo-backend/target/surefire-reports/
-            examo-backend/examo-backend/target/cucumber-reports/
+            target/surefire-reports/
+            target/cucumber-reports/
 
   build-frontend:
     runs-on: ubuntu-latest
