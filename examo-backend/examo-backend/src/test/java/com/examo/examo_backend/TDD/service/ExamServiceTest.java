@@ -41,10 +41,8 @@ class ExamServiceTest {
         Exception exception = assertThrows(RuntimeException.class, () -> {
             examService.createExam(examDto);
         });
-
         assertEquals("Exam title cannot be empty", exception.getMessage());
     }
-
     @Test
     void testCreateValidExam() {
         ExamDto examDto = new ExamDto();
@@ -57,9 +55,7 @@ class ExamServiceTest {
         examDto.setIsActive(true);
 
         Exam examEntity = ExamMapper.mapToExam(examDto);
-
         when(examRepository.save(any(Exam.class))).thenReturn(examEntity);
-
         ExamDto result = examService.createExam(examDto);
 
         assertNotNull(result);
