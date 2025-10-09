@@ -72,14 +72,14 @@ jobs:
     
         # NEW STEP: SonarQube Analysis
    
-        - name: SonarQube Analysis
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          run: |
+      - name: SonarQube Analysis
+        env:
+           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        run: |
             mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-              -Dsonar.projectKey=Danusigan_webb \
-              -Dsonar.organization=danusigan \
+              -Dsonar.projectKey=Srivaxshana_Examo_QA \
+              -Dsonar.organization=srivaxshana \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.qualitygate.wait=false   
           
