@@ -66,7 +66,23 @@ jobs:
       # Run tests excluding Selenium/UI tests
       - name: Run unit and integration tests (excluding Selenium)
         run: mvn test -Dtest='!*Selenium*,!*UI*,!*UITest*,!LoginUITest'
-      
+
+
+
+    
+        # NEW STEP: SonarQube Analysis
+   
+        - name: SonarQube Analysis
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          run: |
+            mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+              -Dsonar.projectKey=Danusigan_webb \
+              -Dsonar.organization=danusigan \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.qualitygate.wait=false   
+          
       - name: Build package
         run: mvn -B -DskipTests package
       
