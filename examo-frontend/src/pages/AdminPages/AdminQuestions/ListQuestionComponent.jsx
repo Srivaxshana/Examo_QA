@@ -172,7 +172,7 @@ const ListQuestionComponent = () => {
         </div>
       </div>
 
-      {/* Popup Modal */}
+      {/* Popup */}
       {showModal && (
         <>
           <div

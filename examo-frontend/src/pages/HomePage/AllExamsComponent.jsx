@@ -34,20 +34,25 @@ const AllExamsComponent = () => {
 return (
   
    <div>
-          <nav className='navbar navbar-dark bg-dark'>
-                <a className="navbar-brand">Examo</a>
+          <nav className="navbar navbar-expand-lg  bg-dark px-3 fs-5 fixed-top">
+                  <img 
+                    src="/images/icon.png" 
+                    alt="Team Member" 
 
-                <button type="button" className="btn btn-dark ms-2" onClick={() => navigate('/admin-login')} >Admin</button>
-                <button type="button" className="btn btn-dark"  onClick={() => navigate('/student/login')}> Student </button>
+                    width="200"
+                    height="75"
+                    style={{objectFit: 'cover'}}
+                  />
+                <div className="d-flex align-items-center" ></div>
+                {/* <h2><a className="navbar-brand navbar-dark fw-bold fs-3">Examo</a></h2> */}
+                <div className="justify-content-center" >
 
-                &nbsp;&nbsp;
-                &nbsp;&nbsp;
-                &nbsp;&nbsp;
-                &nbsp;&nbsp;
-                
-                <button type="button" className="btn btn-dark"  onClick={goToHome} > Home </button>
-
-              
+                  <button type="button" className="btn btn-dark ms-2" onClick={() => navigate('/admin-login')} ><h5>Admin</h5></button>
+                  <button type="button" className="btn btn-dark"  onClick={() => navigate('/student/login')}> <h5>Student</h5> </button>
+                  &nbsp;&nbsp;
+                  &nbsp;&nbsp;
+                  <button type="button" className="btn btn-dark"  onClick={goToHome} ><h5> Home </h5></button>
+                </div>
           </nav>
  
           <div className="container mt-4">

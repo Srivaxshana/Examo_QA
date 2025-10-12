@@ -71,7 +71,7 @@ const Home = () => {
                       className="btn btn-dark btn-lg mt-auto"
                       onClick={() => navigate('/student/login')}
               >
-               Get started
+               <h3>Get started</h3>
               </button>
           </div>
         </div>
@@ -110,26 +110,25 @@ const Home = () => {
             <div className=" text-center  mb-4">
               <h2 className="mb-3"><br></br> What is Examo?</h2>
               <p><h4>
-                Examo is a next-level online digital exam platform designed to help students through the 
-                journey of skill development. We provide comprehensive courses that are tailored to 
-                meet individual learning needs and help students achieve their studies and professional goals.
+              Examo is a next-level online exam platform designed to make learning engaging and effective. We provide a wide range of 
+              exams tailored to different subjects and skill levels, helping students strengthen their knowledge and track their progress.
               </h4></p>
               <p><h4>
-                Our platform offers interactive content, expert instruction, and flexible doing exam
-                schedules to ensure that every student can learn at their own pace and succeed.
-              </h4></p>
+              Our web offers interactive questions, instant feedback, and flexible exam schedules so that learners can practice anytime, 
+              learn at their own pace, and achieve their academic and professional goals with confidence.
+             </h4></p>
             </div>
             <br></br>
             <div className=" text-center mb-4">
               <h2 className="mb-3">Benefits and Significance of Examo?</h2>
               <p><h4>
-                This platform benefits all students by providing access to high-quality exams
-                from anywhere, at any time. Students can track their progress, receive personalized 
-                feedback, and connect with a community of learners.
+                Examo benefits students by providing access to high-quality digital exams from anywhere, at any time. Learners can track their performance, 
+                receive personalized feedback, and build confidence in their skills through structured assessments.
               </h4></p>
               <p><h4>
-                Examo bridges the gap between traditional education and modern learning needs, 
-                making education more accessible, affordable, and effective for everyone.
+                It also connects students with a community of learners, making preparation more collaborative and motivating.
+
+                Examo bridges the gap between traditional exams and modern digital learning needs, making education more accessible, affordable, and effective for everyone.
              </h4> </p>
             </div>
           
@@ -138,16 +137,16 @@ const Home = () => {
             <div className="col-lg-6 text-center">
               <h2 className="mb-3">Our Mission</h2>
               <p><h4>
-                To provide accessible, high-quality online exam that empowers students to 
-                achieve their goals and advance their careers through innovative learning experiences.
+                To provide accessible, high-quality online exams that empower students to achieve their academic and 
+                professional goals through innovative and reliable digital assessment experiences.
               </h4></p>
             </div>
             <br></br>
             <div className="col-lg-6 text-center">
               <h2 className="mb-3">Our Vision</h2>
               <p><h4>
-                To become the leading global platform for online exam, fostering a world where 
-                quality exam is accessible to everyone, regardless of their location or background.
+                To become the leading global platform for online exams, fostering a world where fair, secure, and 
+                effective assessments are accessible to everyone, regardless of location or background.
               </h4></p>
             </div>
           </div>

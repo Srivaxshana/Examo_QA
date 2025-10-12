@@ -15,7 +15,7 @@ const SlidebarAdmin = () => {
   ];
 
   return (
-        <div className="sidebar">
+        <div className="sidebar"><h5><b>
                 {sidebarItems.map((item, index) => (
                     <button
                     key={index}
@@ -25,7 +25,7 @@ const SlidebarAdmin = () => {
                     {item.name}
                     </button>
                 ))}
-        </div>
+        </b></h5></div>
   )
 }
 

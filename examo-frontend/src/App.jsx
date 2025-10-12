@@ -17,15 +17,11 @@ import StudentAllExam from './pages/StudentPages/StudentAllExam/StudentAllExam'
 import StudentQuizComponent from './pages/StudentPages/StudentQuizComponent/StudentQuizComponent'
 import StudentResultComponent from './pages/StudentPages/StudentResultComponent/StudentResultComponent'
 
-
-
 function App() {
   
-
   return (
     <>
     <BrowserRouter>
-
         <Routes>
 
           <Route path='/' element={<Home/>}> </Route>
@@ -46,7 +42,6 @@ function App() {
           <Route path='/student/result/:resultId' element={<StudentResultComponent />} />
         
         </Routes>
-
     </BrowserRouter> 
     </>
   )

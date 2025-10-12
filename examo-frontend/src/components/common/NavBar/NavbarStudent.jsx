@@ -7,24 +7,38 @@ const NavbarStudent = () => {
 
   return (
     <div>
-        <nav className="navbar navbar-dark bg-dark ">
-            <div className="d-flex align-items-center">
-            <span className="brand me-4">
-                <span style={{color: '#ffffffff'}}>E</span>xamo
+      <header>
+        <nav className="navbar navbar-expand-lg bg-dark px-3 fs-5">
+
+          <div className="d-flex align-items-center">
+             <img 
+               src="/images/icon.png" 
+               alt="Team Member" 
+
+               width="200"
+               height="50"
+               style={{objectFit: 'cover'}}
+             />
+                <div className="d-flex align-items-center" ></div>
+            {/* <h2 className="mb-0">
+              <a className="navbar-brand navbar-dark fw-bold fs-3 text-white">
+                Examo
+              </a>
+            </h2> */}
+            <span className="text-white ms-3">
+              <h5 className="mb-0">Student Panel</h5>
             </span>
-            <span className="text-white">Student Panel</span>
-            </div>
-            <div className="d-flex align-items-center gap-3">
-            <div className="profile-icon">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
-                </svg>
-            </div>
-            <button className="logout-btn" onClick={() => navigator('/Home')}>Log Out</button>
-            </div>
+          </div>
+
+          <div className="ms-auto d-flex align-items-center gap-3">
+            <button className="btn btn-danger btn-sm" onClick={() => navigator('/Home')}>
+              <h5>Log Out</h5>
+            </button>
+          </div>
         </nav>
+      </header>
     </div>
   )
-}
-
+}   
+    
 export default NavbarStudent

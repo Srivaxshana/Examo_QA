@@ -7,7 +7,15 @@ const Footer = () => {
         <div className="row">
          
           <div className="col-lg-4 mb-3">
-            <h1 className="text">Examo</h1>
+            {/* <h1 className="text">Examo</h1> */}
+             <img 
+               src="/images/icon.png" 
+               alt="Team Member" 
+
+               width="200"
+               height="75"
+               style={{objectFit: 'cover'}}
+             />
             <p className="small"><h5>
               Examo is an online exam platform 
               enabling secure tests, instant results,
