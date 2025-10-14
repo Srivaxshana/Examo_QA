@@ -41,6 +41,7 @@ class ExamServiceTest {
         Exception exception = assertThrows(RuntimeException.class, () -> {
             examService.createExam(examDto);
         });
+
         assertEquals("Exam title cannot be empty", exception.getMessage());
     }
     @Test
@@ -59,6 +60,8 @@ class ExamServiceTest {
         ExamDto result = examService.createExam(examDto);
 
         assertNotNull(result);
+//        assertEquals("Wrong Title", result.getTitle());
+
         assertEquals("Science Exam", result.getTitle());
     }
 }

@@ -81,7 +81,11 @@ const ListStudentComponent = () => {
                                         <td>{student.phoneNo}</td>
                                         <td>{student.school}</td>
                                         <td>{student.grade}</td>
-                                        <td>{student.studentPassword}</td>
+
+                                        {/*  for QA purpose  */}
+                                        {/* <td>{student.studentPassword}</td> */}
+                                        <td>....</td>
+                                        
                                         <td>
                                             <button className='btn btn-primary info me-2' onClick={() => openModal(student.studentId)}>Edit</button>
                                             <button className='btn btn-danger' onClick={() => removeStudent(student.studentId)}>Delete</button>
