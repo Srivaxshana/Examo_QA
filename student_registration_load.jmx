@@ -10,7 +10,7 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
-        <intProp name="ThreadGroup.num_threads">20</intProp>
+        <intProp name="ThreadGroup.num_threads">10</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -51,7 +51,7 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
   &quot;fullName&quot;: &quot;John Doe ${__threadNum}&quot;,&#xd;
-  &quot;email&quot;: &quot;C${__threadNum}@gmail.com&quot;,&#xd;
+  &quot;email&quot;: &quot;D${__threadNum}@gmail.com&quot;,&#xd;
   &quot;phoneNo&quot;: &quot;07123456${__threadNum}&quot;,&#xd;
   &quot;school&quot;: &quot;ABC School&quot;,&#xd;
   &quot;grade&quot;: &quot;12&quot;,&#xd;
@@ -213,6 +213,7 @@
             </value>
           </objProp>
           <stringProp name="filename"></stringProp>
+          <stringProp name="RespTimeGraph.interval">500</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,20 +28,39 @@ class StudentServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+
+
+//    @Test
+//    void testLoginWithValidCredentials() {
+//        Student student = new Student();
+//        student.setEmail("test@student.com");
+//        student.setStudentPassword("1234");
+//
+//
+//        when(studentRepository.findByEmail("test@student.com"))
+//                .thenReturn(Optional.of(student));
+//
+//        StudentDto result = studentService.login("test@student.com", "1234");
+//
+//        assertNotNull(result);
+//        assertEquals("test@student.com", result.getEmail());
+//    }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
     void testLoginWithValidCredentials() {
         Student student = new Student();
         student.setEmail("test@student.com");
-        student.setStudentPassword("1234");
-
-        when(studentRepository.findByEmail("test@student.com"))
-                .thenReturn(Optional.of(student));
+        student.setStudentPassword(passwordEncoder.encode("1234")); // ✅ encode before save
+        studentRepository.save(student);
 
         StudentDto result = studentService.login("test@student.com", "1234");
-
         assertNotNull(result);
         assertEquals("test@student.com", result.getEmail());
     }
+
 
     @Test
     void testLoginWithInvalidCredentials() {
