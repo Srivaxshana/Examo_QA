@@ -68,8 +68,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-
         http
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/**") // ignore only REST APIs
@@ -80,6 +78,16 @@ public class SecurityConfig {
                 );
 
 
+        //        http
+//                //  Enable CSRF protection for web pages
+//                .csrf(csrf -> csrf
+//                        .ignoringRequestMatchers("/api/**") // ignore only API routes
+//                )
+//                //  Define access control clearly
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/**").permitAll()
+//                        .anyRequest().authenticated()
+//                );
         return http.build();
     }
 
