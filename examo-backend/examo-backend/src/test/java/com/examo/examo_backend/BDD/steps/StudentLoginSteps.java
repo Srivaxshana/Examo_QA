@@ -101,6 +101,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -109,6 +110,9 @@ public class StudentLoginSteps {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private Student student;
     private Student loginResult;
@@ -121,7 +125,8 @@ public class StudentLoginSteps {
         if (student == null) {
             student = new Student();
             student.setEmail(email);
-            student.setStudentPassword(password);
+            //student.setStudentPassword(password);
+            student.setStudentPassword(passwordEncoder.encode(password));
             studentRepository.save(student);
         }
     }
@@ -130,8 +135,12 @@ public class StudentLoginSteps {
     public void the_student_tries_to_login(String email, String password) {
         loginResult = studentRepository.findByEmail(email).orElse(null);
 
-        if (loginResult != null && !loginResult.getStudentPassword().equals(password)) {
-            // Wrong password → treat as login fail
+//        if (loginResult != null && !loginResult.getStudentPassword().equals(password)) {
+//            // Wrong password → treat as login fail
+//            loginResult = null;
+//        }
+        if (loginResult != null && !passwordEncoder.matches(password, loginResult.getStudentPassword())) {
+            // ❌ Password mismatch — login should fail
             loginResult = null;
         }
     }
