@@ -115,11 +115,21 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-devtools-v129</artifactId>
+			<version>4.25.0</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>5.5.1</version>
 			<scope>test</scope>
 		</dependency>
+
+
 
 		<!-- REST Assured for API tests -->
 		<dependency>
