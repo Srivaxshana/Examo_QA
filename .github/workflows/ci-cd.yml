@@ -83,8 +83,8 @@ jobs:
       #         -Dsonar.host.url=https://sonarcloud.io \
       #         -Dsonar.qualitygate.wait=false 
 
-      # - name: Run unit and integration tests (excluding Selenium)
-      #   run: mvn test -Dtest='!*Selenium*,!*UI*,!*UITest*,!LoginUITest'
+      - name: Run unit and integration tests (excluding Selenium)
+        run: mvn test -Dtest='!*Selenium*,!*UI*,!*UITest*,!LoginUITest'
 
       - name: Generate Jacoco coverage report
         run: mvn jacoco:report
