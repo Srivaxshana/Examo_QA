@@ -233,7 +233,7 @@ public class LoginUITest {
 
     @BeforeEach
     void setUp() {
-        // ✅ Configure Chrome for CI/CD (headless)
+        //  Configure Chrome for CI/CD (headless)
         ChromeOptions options = new ChromeOptions();
         //options.addArguments("--headless=new");   // Headless mode for GitHub Actions
         options.addArguments("--no-sandbox");
@@ -248,7 +248,7 @@ public class LoginUITest {
     void testSuccessfulLogin() {
         driver.get("http://localhost:3000/student/login");
 
-        // ✅ Locate input fields and login button
+        //  Locate input fields and login button
         WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("input[type='email'], input[name='email'], #email")
         ));
@@ -259,15 +259,15 @@ public class LoginUITest {
                 By.cssSelector("button[type='submit'], #loginBtn")
         ));
 
-        // ✅ Enter credentials
+        //  Enter credentials
         emailField.sendKeys("sri@gmail.com");
         passwordField.sendKeys("sri123");
         loginButton.click();
 
-        // ✅ Wait until redirected
+        //  Wait until redirected
         wait.until(ExpectedConditions.urlContains("/student-dashboard"));
 
-        // ✅ Verify URL
+        //  Verify URL
         String currentUrl = driver.getCurrentUrl();
         assertEquals("http://localhost:3000/student-dashboard", currentUrl);
     }
@@ -275,7 +275,7 @@ public class LoginUITest {
     @AfterEach
     void tearDown() {
         if (driver != null) {
-            driver.quit(); // ✅ Always close browser (important for CI/CD)
+            driver.quit(); //  Always close browser ( for CI/CD)
         }
     }
 }

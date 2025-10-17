@@ -179,7 +179,7 @@ class StudentServiceTest {
     @InjectMocks
     private StudentServiceImpl studentService;
 
-    private PasswordEncoder passwordEncoder; // ✅ will manually set it
+    private PasswordEncoder passwordEncoder; //  will manually set it
 
     public StudentServiceTest() {
         MockitoAnnotations.openMocks(this);
@@ -187,7 +187,7 @@ class StudentServiceTest {
 
     @BeforeEach
     void setUp() {
-        passwordEncoder = new BCryptPasswordEncoder(); // ✅ initialize manually
+        passwordEncoder = new BCryptPasswordEncoder(); //  initialize manually
         // inject manually into studentService since it's not managed by Spring
         try {
             var field = StudentServiceImpl.class.getDeclaredField("passwordEncoder");
@@ -202,7 +202,7 @@ class StudentServiceTest {
     void testLoginWithValidCredentials() {
         Student student = new Student();
         student.setEmail("test@student.com");
-        student.setStudentPassword(passwordEncoder.encode("1234")); // ✅ encode before mocking
+        student.setStudentPassword(passwordEncoder.encode("1234")); //  encode before mocking
 
         when(studentRepository.findByEmail("test@student.com"))
                 .thenReturn(Optional.of(student));

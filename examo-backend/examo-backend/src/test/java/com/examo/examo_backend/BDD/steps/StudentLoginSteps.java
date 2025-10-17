@@ -140,7 +140,7 @@ public class StudentLoginSteps {
 //            loginResult = null;
 //        }
         if (loginResult != null && !passwordEncoder.matches(password, loginResult.getStudentPassword())) {
-            // ❌ Password mismatch — login should fail
+            //  Password mismatch — login should fail
             loginResult = null;
         }
     }
