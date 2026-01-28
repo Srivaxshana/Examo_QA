@@ -7,7 +7,7 @@ Examo_QA is a full-stack digital examination management system developed as part
 
 ---
 
-## 🎯 Project Objectives
+##  Project Objectives
 
 - Apply **Software Testing & QA concepts** in a real-world application
 - Implement **unit, integration, system, and automation testing**
@@ -16,16 +16,16 @@ Examo_QA is a full-stack digital examination management system developed as part
 
 ---
 
-## 🚀 Features
+##  Features
 
-### 🖥️ Application Features
+###  Application Features
 - User authentication and role-based access
 - Exam creation and management
 - Question and answer management
 - Student exam participation
 - Result evaluation and tracking
 
-### 🧪 Testing & Quality Assurance
+###  Testing & Quality Assurance
 - Unit testing (backend)
 - API testing
 - UI automation testing (Selenium)
@@ -49,7 +49,7 @@ Examo_QA is a full-stack digital examination management system developed as part
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 Examo_QA/
@@ -82,7 +82,7 @@ npm run dev
 
 ---
 
-## 🧪 Running Tests
+##  Running Tests
 
 ### Unit & API Tests
 ```bash
