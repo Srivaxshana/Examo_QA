@@ -35,7 +35,7 @@ Examo_QA is a full-stack digital examination management system developed as part
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |------|-----------|
@@ -63,7 +63,7 @@ Examo_QA/
 
 ---
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 ### Backend Setup
 1. Configure MySQL database
